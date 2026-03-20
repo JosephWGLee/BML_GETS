@@ -12,6 +12,7 @@ Here, we compared and optimised two time-series differential expression tools:
 By comparing these tools, this project assesses how each handles the high levels of noise and overdispersion typical of stress-condition RNA-seq datasets and shows differences in the genes identified by each method.
 
 #Contents
+
  - data: Example toy data (processed and preprocessed)
  - docs: Poster, presentation and full write up
  - notebooks
