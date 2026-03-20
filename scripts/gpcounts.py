@@ -5,8 +5,8 @@ import gpflow
 from IPython.display import display
 import tensorflow as tf 
 
-counts_df = pd.read_csv(r"C:/Users/Jofu2/OneDrive - The University of Manchester/Documents/Manchester/Project 1/Github/Refactoring/data/all_normalised_counts.csv", index_col=[0], delimiter=";")
-sampletable_df = pd.read_csv(r"C:/Users/Jofu2/OneDrive - The University of Manchester/Documents/Manchester/Project 1/Github/Refactoring/data/all_sampletable.csv", index_col=[0])
+counts_df = pd.read_csv(r"all_normalised_counts.csv", index_col=[0])
+sampletable_df = pd.read_csv(r"all_sampletable.csv", index_col=[0])
 
 #CSV processing
 
