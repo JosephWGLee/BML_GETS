@@ -11,7 +11,7 @@ Here, we compared and optimised two time-series differential expression tools:
 
 By comparing these tools, this project assesses how each handles the high levels of noise and overdispersion typical of stress-condition RNA-seq datasets and shows differences in the genes identified by each method.
 
-#Contents
+# Contents
 
  - data: Example toy data (processed and preprocessed)
  - docs: Poster, presentation and full write up
@@ -20,7 +20,7 @@ By comparing these tools, this project assesses how each handles the high levels
  - outputs: Example outputs with full data
  - requirements: Requirements for GPcounts python install (Python 3.10, GPflow 2.9, Tensorflow 2.18.0)
 
-#Documentation
+# Documentation
 
 Further details regarding the experimental conditions, stress models, and biological interpretation can be found in the project report. Additional information for each package can be found in their respective repositories:
 
