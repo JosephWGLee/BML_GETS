@@ -1,37 +1,37 @@
-import numpy as np
 import pandas as pd
-import os
+import numpy as np
+import random
+import gpflow 
 from IPython.display import display
-import scipy.stats as stats
-from statsmodels.stats.multitest import multipletests
-import tensorflow as tf
-import gpflow
+import tensorflow as tf 
+
+counts_df = pd.read_csv(r"C:/Users/Jofu2/OneDrive - The University of Manchester/Documents/Manchester/Project 1/Github/Refactoring/data/all_normalised_counts.csv", index_col=[0], delimiter=";")
+sampletable_df = pd.read_csv(r"C:/Users/Jofu2/OneDrive - The University of Manchester/Documents/Manchester/Project 1/Github/Refactoring/data/all_sampletable.csv", index_col=[0])
+
+#CSV processing
+
+counts_df = counts_df.loc[(counts_df.iloc[:, 1:] > 0).sum(axis=1) > 15]
+counts_df = counts_df.round().astype(int) 
+genes_name = counts_df.index.tolist()
+
 from GPcounts.RNA_seq_GP import rna_seq_gp
 
-counts_df = pd.read_csv(r"all_normalised_counts.csv")
-sampletable_df = pd.read_csv(r"all_sampletable.csv")
-
-#CSV processing 
-
-counts_df = counts_df.rename(columns={"Unnamed: 0": "ID"})
-counts_df.set_index(counts_df.columns[0], inplace=True)
-
-counts_df = counts_df.round().astype(int)
-counts_df = counts_df.loc[(df.iloc[:, 1:] > 0).sum(axis=1) > 15]
-counts_df.set_index(counts_df.columns[0], inplace = True)
-
 X = sampletable_df[["Time"]]
-Y = counts_df.index.tolist()
+Y = counts_df
 
-#gpcounts
+#Two sample test
 
 sparse = True
-gp_counts = rna_seq_gp(X,Y.loc[gene_names],M=10, sparse=sparse) 
+gp_counts = rna_seq_gp(X,Y.loc[genes_name], M=10, safe_mode=False) 
 lik_name = "Negative_binomial" 
+
 results = gp_counts.Two_samples_test(lik_name)
 results_df = pd.DataFrame(results)
 
-#Statistical tests 
+import scipy.stats as stats
+from statsmodels.stats.multitest import multipletests
+
+#Statistical Tests
 
 llr_values = results.loc[:,"log_likelihood_ratio"]
 
@@ -48,6 +48,8 @@ results_df["significant"] = rejected
 
 results_df.to_csv("all_gpcounts_significant_genes.csv", index=True)
 
+import os
+
 #Kernel fitting
 
 counts_array = Y.values
@@ -59,6 +61,8 @@ time_points_array = time_points_array.reshape(-1,1)
 rbf_kernel = gpflow.kernels.SquaredExponential()
 periodic_kernel = gpflow.kernels.Periodic(base_kernel=rbf_kernel)
 combined_kernel = rbf_kernel + periodic_kernel
+
+#Included due to GPcounts' tendency to fail 
 
 file_path = "Only_RBF_Periodicity_Values.csv"
 if os.path.exists(file_path):
